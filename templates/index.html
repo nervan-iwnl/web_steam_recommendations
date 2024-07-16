@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steam Game Recommender</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="overlay">
+        <a href="{{ url_for('index') }}">Main page</a>
+        <a href="{{ url_for('get_games') }}">Your games</a>
+        <a href="{{ url_for('recommend') }}">Recommendations</a>
+        {% if steam_id %}
+            <a href="{{ url_for('logout') }}">Logout</a>
+        {% endif %}
+    </div>
+    <div class="container">
+        <h1>Welcome to Steam Game Recommender</h1>
+        {% if not steam_id %}
+            <p>To get recommendations you need to log in with Steam account</p>
+            <button id="login-button">Log in with Steam</button>
+        {% endif %}
+        {% if steam_profile %}
+            <img src="{{ steam_profile['avatar'] }}" alt="User Avatar">
+            <h2>{{ steam_profile['nickname'] }}</h2>
+            <p>Country: {{ steam_profile['region'] }}</p>
+            <p>Account creation date: {{ steam_profile['created_date'] }}</p>
+        {% endif %}
+    </div>
+
+    <script>
+        document.getElementById('login-button').addEventListener('click', function() {
+            window.location.href = "{{ url_for('login') }}";
+        });
+    </script>
+</body>
+</html>

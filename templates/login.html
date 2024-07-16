@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login with Steam</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="overlay">
+        <a href="{{ url_for('index') }}">Main Page</a>
+        <a href="{{ url_for('get_games') }}">Your Games</a>
+        <a href="{{ url_for('recommend') }}">Recommendations</a>
+    </div>
+    <div class="container">
+        <h1>Login with Steam</h1>
+        <a href="{{ url_for('login') }}">Login with Steam</a>
+    </div>
+</body>
+</html>

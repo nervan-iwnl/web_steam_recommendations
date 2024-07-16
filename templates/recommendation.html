@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Рекомендации</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="overlay">
+        <a href="{{ url_for('index') }}">Main Page</a>
+        <a href="{{ url_for('get_games') }}">Your Games</a>
+        <a href="{{ url_for('recommend') }}">Recommendations</a>
+    </div>
+    <div class="container">
+        <h1>Game recommendations</h1>
+        <div id="recommendations">
+            {% for rec in recommendations %}
+                <div class="recommendation">
+                    <img src="{{ rec.header_image }}" alt="{{ rec.name }}" />
+                    <h3>{{ rec.name }}</h3>
+                    <p>{{ rec.description }}</p>
+                    <p>Price: {{ rec.price }}</p>
+                    <a href="{{ rec.store_url }}">Open in store</a>
+                </div>
+            {% endfor %}
+        </div>
+        <button id="load-more">Load More</button>
+    </div>
+    <script>
+        $(document).ready(function() {
+            var offset = 10;
+
+            function loadRecommendations() {
+                $.ajax({
+                    url: '/load_more_recommendations',
+                    method: 'GET',
+                    data: { offset: offset },
+                    success: function(data) {
+                        if (data.length === 0) {
+                            $('#load-more').prop('disabled', true); // Отключаем кнопку, если больше рекомендаций нет
+                            return;
+                        }
+                        data.forEach(function(rec) {
+                            $('#recommendations').append(
+                                '<div class="recommendation">' +
+                                '<img src="' + rec.header_image + '" alt="' + rec.name + '" />' +
+                                '<h3>' + rec.name + '</h3>' +
+                                '<p>' + rec.description + '</p>' +
+                                '<p>Цена: ' + rec.price + '</p>' +
+                                '<a href="' + rec.store_url + '">Open in store</a>' +
+                                '</div>'
+                            );
+                        });
+                        offset += data.length;
+                    },
+                    error: function() {
+                        alert('Error on loading additional recommendations');
+                    }
+                });
+            }
+
+            $('#load-more').click(function() {
+                loadRecommendations();
+            });
+
+            loadRecommendations(); 
+        });
+    </script>
+</body>
+</html>
