@@ -19,7 +19,7 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
     border-radius: 8px;
-    margin-top: 60px; /* Добавлено пространство сверху для overlay */
+    margin-top: 60px; 
     margin-bottom: 20px;
 }
 
