@@ -38,7 +38,7 @@
                     data: { offset: offset },
                     success: function(data) {
                         if (data.length === 0) {
-                            $('#load-more').prop('disabled', true); // Отключаем кнопку, если больше рекомендаций нет
+                            $('#load-more').prop('disabled', true);
                             return;
                         }
                         data.forEach(function(rec) {
