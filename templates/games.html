@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Steam Games</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .pagination {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .pagination button {
+            margin: 0 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay">
+        <a href="{{ url_for('index') }}">Main page</a>
+        <a href="{{ url_for('get_games') }}">Your games</a>
+        <a href="{{ url_for('recommend') }}">Recommendations</a>
+    </div>
+    <div class="container">
+        <h1>Your Steam Games</h1>
+        <ul id="game-list">
+            {% for game in games %}
+                <li>{{ game['name'] }}</li>
+            {% endfor %}
+        </ul>
+        <div class="pagination">
+            <button id="load-more">Load other games</button>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            var offset = 20; 
+
+            function loadMoreGames() {
+                $.ajax({
+                    url: '/load_more_games',
+                    method: 'GET',
+                    data: { offset: offset },
+                    success: function(data) {
+                        if (data.length === 0) {
+                            $('#load-more').prop('disabled', true).text('Больше игр нет');
+                            return;
+                        }
+                        data.forEach(function(game) {
+                            $('#game-list').append('<li>' + game + '</li>');
+                        });
+                        offset += 20; 
+                    },
+                    error: function() {
+                        alert('Error while loading addictional games');
+                    }
+                });
+            }
+
+            $('#load-more').click(function() {
+                loadMoreGames();
+            });
+        });
+    </script>
+</body>
+</html>
